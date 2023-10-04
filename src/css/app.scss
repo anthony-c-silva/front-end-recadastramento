@@ -1,0 +1,41 @@
+
+// app global css in SCSS form
+:root{
+  --calendar-background-dark: #4F4F4F33 !important;
+  --q-dark: $dark-page !important;
+}
+
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('../assets/Manrope/Manrope-VariableFont_wght.ttf');
+}
+
+*, body{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: $accent #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: $accent;
+    border-radius: 10px;
+    border: 3px solid transparent;
+  }

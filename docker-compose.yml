@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  asten-pgd-frontend:
+    container_name: asten-pgd-frontend
+    image: avmb/asten-pgd-frontend:dev
+    ports:
+      - 3000:80
+    restart: always

@@ -1,0 +1,31 @@
+export class Recad {
+  id?: number;
+  descricao?: string;
+  indExigeSms?: string;
+  indExigeMail?: string;
+  dtIniRecad?: string;
+  dtFimRecad?: string;
+  indAtivo?: string;
+  faseAcessoPortal?: string;
+  tamAnexosKb?: number;
+  indExigeAnexos?: string;
+  indAcessoMatr?: string;
+  indAcessoDtIngr?: string;
+  indSomenteProvForm?: string;
+  exigeDocIdentidade?: string;
+  exigeConclEnsMedio?: string;
+  exigeProvaColacao?: string;
+  exigeComprovEstagio?: string;
+  exigeCertNasc?: string;
+  exigeCertCasamento?: string;
+  exigeTituloEleitor?: string;
+  exigeAtoNatural?: string;
+  nivelCursoItem?: number;
+  indAcessoNivelCurso?: string;
+  nivelCursoTab?: number;
+  codOperador?: number;
+  dtAlteracao?: string;
+  hrAlteracao?: string;
+  enderecoFisico?: string;
+  concorrencia?: string;
+}

@@ -1,0 +1,70 @@
+stages:
+  - build-image
+  - deploy
+
+build_prod:
+  stage: build-image
+  only:
+    - main
+  image: docker:stable
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_TOKEN
+  script:
+    - echo '@@@@@ Fazendo build da imagem Docker - Produção @@@@@'
+    - docker build --no-cache --tag avmb/asten-pgd-frontend:prod .
+    - docker push avmb/asten-pgd-frontend:prod
+    - echo '@@@@@ finalizado @@@@@'
+
+build_homo:
+  stage: build-image
+  only:
+    - homo
+  image: docker:stable
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_TOKEN
+  script:
+    - echo '@@@@@ Fazendo build da imagem Docker - Homologação @@@@@'
+    - docker build --no-cache --tag avmb/asten-pgd-frontend:homo .
+    - docker push avmb/asten-pgd-frontend:homo
+    - echo '@@@@@ finalizado @@@@@'
+
+build_dev:
+  stage: build-image
+  only:
+    - dev
+  image: docker:stable
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_TOKEN
+  script:
+    - echo '@@@@@ Fazendo build da imagem Docker - Desenvolvimento @@@@@'
+    - docker build --no-cache --tag avmb/asten-pgd-frontend:dev .
+    - docker push avmb/asten-pgd-frontend:dev
+    - echo '@@@@@ finalizado @@@@@'
+
+deploy:
+  only:
+    - dev
+  stage: deploy
+  before_script:
+    - 'which ssh-agent || ( apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - echo '@@@@@ Atualizando container @@@@@'
+    - ssh $SSH_USER@$SSH_ADDRESS "
+      cd /opt/docker/plataforma-cadastral/frontend &&
+      sudo docker compose down &&
+      sudo docker system prune -af &&
+      sudo docker compose up -d --build &&
+      while ! curl http://localhost:3000/ -s --output /dev/null; do sleep 5 && echo "carregando aplicação..."; done;"
+    - echo '@@@@@ finalizado @@@@@'
